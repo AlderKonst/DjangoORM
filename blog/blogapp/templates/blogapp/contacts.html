@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}
+Контакты
+{% endblock %}
+
+{% block content %}
+<div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        <p>Хотите связаться? Заполните форму ниже, чтобы отправить мне сообщение, и я отвечу вам как можно скорее!</p>
+        <div class="my-5">
+
+            <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                <div class="form-floating">
+                    <input class="form-control" id="name" type="text" placeholder="Введите ваше имя..." data-sb-validations="required" />
+                    <label for="name">Имя</label>
+                    <div class="invalid-feedback" data-sb-feedback="name:required">Имя обязательно.</div>
+                </div>
+                <div class="form-floating">
+                    <input class="form-control" id="email" type="email" placeholder="Введите ваш email..." data-sb-validations="required,email" />
+                    <label for="email">Email адрес</label>
+                    <div class="invalid-feedback" data-sb-feedback="email:required">Email обязателен.</div>
+                    <div class="invalid-feedback" data-sb-feedback="email:email">Email недействителен.</div>
+                </div>
+                <div class="form-floating">
+                    <input class="form-control" id="phone" type="tel" placeholder="Введите ваш номер телефона..." data-sb-validations="required" />
+                    <label for="phone">Номер телефона</label>
+                    <div class="invalid-feedback" data-sb-feedback="phone:required">Номер телефона обязателен.</div>
+                </div>
+                <div class="form-floating">
+                    <textarea class="form-control" id="message" placeholder="Введите ваше сообщение здесь..." style="height: 12rem" data-sb-validations="required"></textarea>
+                    <label for="message">Сообщение</label>
+                    <div class="invalid-feedback" data-sb-feedback="message:required">Сообщение обязательно.</div>
+                </div>
+                <br />
+
+                <div class="d-none" id="submitSuccessMessage">
+                    <div class="text-center mb-3">
+                        <div class="fw-bolder">Форма успешно отправлена!</div>
+                        Чтобы активировать эту форму, зарегистрируйтесь на
+                        <br />
+                        <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                    </div>
+                </div>
+
+                <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Ошибка при отправке сообщения!</div></div>
+                <!-- Кнопка отправки -->
+                <button class="btn btn-primary text-uppercase disabled" id="submitButton" type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

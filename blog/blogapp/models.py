@@ -47,5 +47,9 @@ class Post(models.Model):
     # Связь с тегом (много к многому, вот так просто)
     tags = models.ManyToManyField(Tag)
 
+    # Картинки
+    # 2 варианта хранения картинки: в базе и в файле
+    image = models.ImageField(upload_to='posts', null=True, blank=True)
+
     def __str__(self):
         return self.name

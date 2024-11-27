@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os # Из-за STATICFILES_DIRS и TEMPLATES
+
+from django.conf.global_settings import STATICFILES_DIRS, MEDIA_URL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "blogapp"
+    "blogapp" # Своё приложение добавляем
 ]
 
 MIDDLEWARE = [
@@ -55,7 +58,7 @@ ROOT_URLCONF = "blog.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')], # Свои шаблоны тут будут
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -101,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# Международная локализация
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = "ru-RU"
@@ -113,12 +116,19 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Статичные файлы (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
-# Default primary key field type
+# Тип поля по умолчанию для первичного ключа
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media") # Для медиа файлов, которые часто меняются
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # Чтобы в консоль Емейл с сообщением отправлялся
+# EMAIL_FILE_PATH = '/tmp/emails' # Чтобы в файле Емейл с сообщением отправлялся и сохранялся (не получилось)
