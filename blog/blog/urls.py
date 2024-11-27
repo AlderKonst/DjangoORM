@@ -22,5 +22,7 @@ app_name = 'blogapp'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(('blogapp.urls', 'blogapp'), namespace='blog')),
+    path('',
+         include(('blogapp.urls', 'blogapp'),
+         namespace='blog')), # Это чтобы в index.html можно было сделать так: <a href="{% url 'blog:post' id=post.id %}">
 ]
