@@ -7,13 +7,21 @@
 {% block content %}
 <div class="row gx-4 gx-lg-5 justify-content-center">
     <div class="col-md-10 col-lg-8 col-xl-7">
-        <p>Хотите связаться со мной? Заполните форму ниже, чтобы отправить мне сообщение, и я свяжусь с вами как можно скорее!</p>
+        <p>Создаём пост через форму</p>
         <div class="my-5">
-
-            <form id="contactForm" method="POST">
+            <!-- Специально для изображений нужно вставлять enctype="multipart/form-data" -->
+            <form id="contactForm" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{form.as_ul}}
-                <button type="submit">Отправить</button>
+                {#form.as_p#}
+                {% for field in form %}
+                    <p>{{field.label_tag}}</p>
+                <hr>
+                {% for error in field.errors %}
+                    {{error}}
+                {% endfor %}
+                <p>{{field}}</p>
+                {% endfor %}
+                <button type="submit">Сохранить</button>
             </form>
         </div>
     </div>

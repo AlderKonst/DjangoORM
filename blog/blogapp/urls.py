@@ -22,9 +22,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.main_view, name='index'),
+    path('contact/', views.contact_view, name='contact'),
     path('create/', views.create_post, name='create'),
     path('post/<int:id>/', views.post, name='post'),
-    path('contacts/', views.contacts, name='contacts')
+    path('tag_list', views.TagListView.as_view(), name='tag_list'), # Так создаются маршруты с базовыми классами
+    path('tag_detail/<int:pk>/', views.TagDetailView.as_view(), name='tag_detail'), # pk - это первичный ключ
 ]
 
 if settings.DEBUG: # Чтобы изображения могли отображаться в браузере

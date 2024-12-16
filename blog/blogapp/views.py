@@ -1,15 +1,16 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.urls import reverse
+from django.views.generic import ListView, DetailView # Базовые классы
 
-from .models import Post
-from .form import ContactForm
+from .models import Post, Tag
+from .form import ContactForm, PostForm
 from django.core.mail import send_mail
 
 def main_view(request):
     posts = Post.objects.all()
     return render(request,'blogapp/index.html', context={'posts': posts})
 
-def create_post(request):
+def contact_view(request):
     if request.method == 'POST':
         form = ContactForm(request.POST) # Получим данные из формы
         if form.is_valid():
@@ -35,5 +36,24 @@ def post(request, id):
     post = get_object_or_404(Post, id=id)
     return render(request, 'blogapp/post.html', context={'post': post})
 
-def contacts(request):
-    return render(request, 'blogapp/contacts.html')
+def create_post(request):
+    if request.method == 'GET':
+        form = PostForm() # Из forms.py
+        return render(request, 'blogapp/create.html', context={'form': form})
+    else:
+        form = PostForm(request.POST, # Передаём данные, которые сюда придут
+                        files=request.FILES) # Если есть изображения или файлы, то ещё и это прописываем
+        if form.is_valid(): # Если данные формы заполнены правильно
+            form.save() # Все данные, поля помнит, поэтому их загрузит и заполнит в БД
+            return HttpResponseRedirect(reverse('blogapp:index'))  # Перенаправляем на главную страницу
+        else: # Если данные формы заполнены неправильно, то загрузит прежднюю страницу с формой для заполнения
+            return render(request, 'blogapp/create.html', context={'form': form}) # причём в полях страницы уже будут видны ошибки
+
+class TagListView(ListView):
+    model =Tag
+    tamplate_name = 'blogapp/tag_list.html' # Необязательно, если его не будет, то будет где-то храниться по-умолчанию
+
+# Детальная информация
+class TagDetailView(DetailView):
+    model = Tag
+    tamplate_name = 'blogapp/tag_detail.html'
