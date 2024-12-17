@@ -27,6 +27,9 @@ urlpatterns = [
     path('post/<int:id>/', views.post, name='post'),
     path('tag_list', views.TagListView.as_view(), name='tag_list'), # Так создаются маршруты с базовыми классами
     path('tag_detail/<int:pk>/', views.TagDetailView.as_view(), name='tag_detail'), # pk - это первичный ключ
+    path('tag_create/', views.TagCreateView.as_view(), name='tag_create'), #
+    path('tag_update/<int:pk>/', views.TagUpdateView.as_view(), name='tag_update'), #
+    path('tag_delate/<int:pk>/', views.TagDelateView.as_view(), name='tag_delate'), #
 ]
 
 if settings.DEBUG: # Чтобы изображения могли отображаться в браузере

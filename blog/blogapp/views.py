@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
-from django.urls import reverse
-from django.views.generic import ListView, DetailView # Базовые классы
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView # Базовые классы
+from django.views.generic.base import ContextMixin # Для создание общих классов
 
 from .models import Post, Tag
 from .form import ContactForm, PostForm
@@ -49,11 +50,57 @@ def create_post(request):
         else: # Если данные формы заполнены неправильно, то загрузит прежднюю страницу с формой для заполнения
             return render(request, 'blogapp/create.html', context={'form': form}) # причём в полях страницы уже будут видны ошибки
 
-class TagListView(ListView):
+class NameContextMixin(ContextMixin): # Чтобы везде, где передадим класс NameContextMixin прописывало функции ниже
+    def get_context_data(self, **kwargs): # Отвечает за передачу параметров в контекст (тот самый context)
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Тэги'
+        return context
+
+class TagListView(ListView, NameContextMixin):
     model =Tag
     tamplate_name = 'blogapp/tag_list.html' # Необязательно, если его не будет, то будет где-то храниться по-умолчанию
+    context_object_name = 'tags' # Если хочется на странице использовать не стандартное object_list, а своё имя
+
+    def get_queryset(self): # Получение данных (по-умолчанию возвращает все тэги, но можно настроить здесь ниже)
+        return Tag.objects.all() # В таком виде обычно возвращает (по-умолчанию), а можно настроить (переопределить), например, на получение определённых данных
 
 # Детальная информация
-class TagDetailView(DetailView):
+class TagDetailView(DetailView, NameContextMixin):
     model = Tag
     tamplate_name = 'blogapp/tag_detail.html'
+
+    # Эти 3 функции сделаны так, что ничего не меняют, но в дальнейшем можно понастроить и изменить где надо, если не устраивают имена по-умолчанию
+    def get(self, request, *args, **kwargs): # Базовый get-функция переопределения
+        self.tag_id =kwargs['pk'] # Для переопределения имени поля ключа (демонстрируется в учебных целях)
+        return super().get(request, *args, **kwargs) # Переопределяется
+    def get_object(self, queryset=None): # Для получения одного объекта
+        return get_object_or_404(Tag,
+                                 pk=self.tag_id) # Имя поля ключа снова такая же (демонстрируется в учебных целях)
+
+
+# Создание тэга
+class TagCreateView(CreateView, NameContextMixin): # Вместо подобной громадной def create_post(request)
+    model = Tag
+    # form_class =
+    fields = '__all__' # Выбираем все поля класса Tag
+    success_url = reverse_lazy('blogapp:tag_list') # Вместо длинной конструкции с return HttpResponseRedirect(reverse('blogapp:tag_list.html'))
+    template_name = 'blogapp/tag_create.html'
+    def post(self, request, *args, **kwargs): # Срабатывает, когда пришёл POST-запрос
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form): # Метод срабатывает после того, как выясняется, что форма правильная
+        # Кроме того, можно с этой формой тут делать всякое
+        return super().form_valid(form)
+
+
+class TagUpdateView(UpdateView):
+    model = Tag
+    fields = '__all__'
+    success_url = reverse_lazy('blogapp:tag_list')
+    template_name = 'blogapp/tag_create.html'
+
+class TagDelateView(DeleteView):
+    model = Tag
+    fields = '__all__'
+    success_url = reverse_lazy('blogapp:tag_list')
+    template_name = 'blogapp/tag_delate_confirm.html' # Страница подтверждения удаления

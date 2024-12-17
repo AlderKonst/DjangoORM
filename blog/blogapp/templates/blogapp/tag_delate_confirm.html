@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Удаления тэга {{object.name}}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        Хотите ли удалить тэг {{object.name}}?
+    </div>
+    <form id="contactForm" method="POST">
+        {% csrf_token %}
+         <button type="submit" class="btn-btn-danger">Да</button>
+    </form>
+</div>
+{% endblock %}
