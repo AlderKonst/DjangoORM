@@ -1,10 +1,22 @@
 from django.db import models
 
+# 3 типа наследования: абстрактное, классическое и прокси
+
+class TimeStamp(models.Model): # Абстрактный тип наследования здесь
+    create = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True # Теперь для TimeStamp не создаётся новая таблица, чисто для избежания дублирования
+    # Т.е. данные хранятся только в каждом наследнике
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=16,
                             unique=True)
     description = models.TextField(blank=True)
+    # create = models.DateTimeField(auto_now_add=True)
+    # update = models.DateTimeField(auto_now=True)
     # Основные типы данных
     # Дата
     # models.DateField
@@ -35,12 +47,12 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
-class Post(models.Model):
+class Post(TimeStamp):
     name = models.CharField(max_length=32,
                             unique=True)
     text = models.TextField()
-    create = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    # create = models.DateTimeField(auto_now_add=True) # Удалено благодаря наследованию от TimeStamp
+    # update = models.DateTimeField(auto_now=True) # Удалено благодаря наследованию от TimeStamp
     # Связь с категорией
     # Один ко многому
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -53,3 +65,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.name
+
+# Классическое наследование
+class CoreObject(models.Model):
+    name = models.CharField(max_length=32)
+
+class Car(CoreObject):
+    description = models.TextField()
+
+class Toy(CoreObject):
+    text = models.TextField()
