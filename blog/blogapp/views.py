@@ -77,7 +77,6 @@ class TagDetailView(DetailView, NameContextMixin):
         return get_object_or_404(Tag,
                                  pk=self.tag_id) # Имя поля ключа снова такая же (демонстрируется в учебных целях)
 
-
 # Создание тэга
 class TagCreateView(CreateView, NameContextMixin): # Вместо подобной громадной def create_post(request)
     model = Tag
