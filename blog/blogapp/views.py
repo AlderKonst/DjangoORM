@@ -58,7 +58,7 @@ class NameContextMixin(ContextMixin): # Чтобы везде, где перед
 
 class TagListView(ListView, NameContextMixin):
     model =Tag
-    tamplate_name = 'blogapp/tag_list.html' # Необязательно, если его не будет, то будет где-то храниться по-умолчанию
+    template_name = 'blogapp/tag_list.html' # Необязательно, если его не будет, то будет где-то храниться по-умолчанию
     context_object_name = 'tags' # Если хочется на странице использовать не стандартное object_list, а своё имя
 
     def get_queryset(self): # Получение данных (по-умолчанию возвращает все тэги, но можно настроить здесь ниже)
@@ -67,7 +67,7 @@ class TagListView(ListView, NameContextMixin):
 # Детальная информация
 class TagDetailView(DetailView, NameContextMixin):
     model = Tag
-    tamplate_name = 'blogapp/tag_detail.html'
+    template_name = 'blogapp/tag_detail.html'
 
     # Эти 3 функции сделаны так, что ничего не меняют, но в дальнейшем можно понастроить и изменить где надо, если не устраивают имена по-умолчанию
     def get(self, request, *args, **kwargs): # Базовый get-функция переопределения
