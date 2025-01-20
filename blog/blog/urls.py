@@ -17,12 +17,18 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-
-app_name = 'blogapp'
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',
          include(('blogapp.urls', 'blogapp'),
          namespace='blog')), # Это чтобы в index.html можно было сделать так: <a href="{% url 'blog:post' id=post.id %}">
+    path('users/',
+         include(('usersapp.urls', 'users'),
+         namespace='users'))
 ]
+
+if settings.DEBUG: # Чтобы изображения могли отображаться в браузере
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

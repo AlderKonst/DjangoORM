@@ -1,4 +1,5 @@
 from django.db import models
+from usersapp.models import BlogUser
 
 # 3 типа наследования: абстрактное, классическое и прокси
 
@@ -62,6 +63,7 @@ class Post(TimeStamp):
     # Картинки
     # 2 варианта хранения картинки: в базе и в файле
     image = models.ImageField(upload_to='posts', null=True, blank=True)
+    user = models.ForeignKey(BlogUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

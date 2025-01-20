@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "blogapp" # Своё приложение добавляем
+    "blogapp", # Своё приложение добавляем
+    "usersapp" # Ещё добавляем приложения для добавления пользователей, авторизации, аутентификации ...
 ]
 
 MIDDLEWARE = [
@@ -132,3 +133,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media") # Для медиа файлов, �
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # Чтобы в консоль Емейл с сообщением отправлялся
 # EMAIL_FILE_PATH = '/tmp/emails' # Чтобы в файле Емейл с сообщением отправлялся и сохранялся (не получилось)
+
+# Переназначение стандартной модели пользователя
+AUTH_USER_MODEL = 'usersapp.BlogUser' # Название приложения управления пользователями и модель
+
+# Куда идти после ввода логина и пароля при входе (редирект)
+LOGIN_REDIRECT_URL = '/'
+# Куда идти после выхода (редирект)
+LOGOUT_REDIRECT_URL = '/'
+# Куда идти после ввода логина и пароля при входе, ЕСЛИ НЕТ ПРАВ (редирект)
+LOGIN_URL = '/users/login/'

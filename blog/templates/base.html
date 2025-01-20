@@ -28,10 +28,18 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:index' %}">Главная</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:contact' %}">Контакты</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:create' %}">Создать пост</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:tag_list' %}">Список тэгов</a></li>
+                        <li class="nav-item"><a class="nav-link " href="{% url 'blog:index' %}">Главная</a></li>
+                        <li class="nav-item"><a class="nav-link " href="{% url 'blog:contact' %}">Контакты</a></li>
+                        <li class="nav-item"><a class="nav-link " href="{% url 'blog:create' %}">Создать пост</a></li>
+                        <li class="nav-item"><a class="nav-link " href="{% url 'blog:tag_list' %}">Список тэгов</a></li>
+                        <li class="nav-item"><a class="nav-link " href="{% url 'users:login' %}">Вход</a></li>
+                        <li class="nav-item"><a class="nav-link " href="{% url 'users:register' %}">Регистрация</a></li>
+                        <li class="nav-item"> <!-- В занятии можно было просто ссылку, а теперь в целях безопасности для выхода можно только так -->
+                            <form action="{% url 'usersapp:logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link">Выход</button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -16,18 +16,13 @@ https://docs.djangoproject.com/en/5.1/topics/http/urls/
 """
 
 from django.urls import path
-from blogapp import views
+from usersapp import views
+from django.contrib.auth.views import LogoutView
 
-app_name = 'blogapp'
+app_name = 'usersapp'
 
 urlpatterns = [
-    path('', views.main_view, name='index'),
-    path('contact/', views.contact_view, name='contact'),
-    path('create/', views.create_post, name='create'),
-    path('post/<int:id>/', views.post, name='post'),
-    path('tag_list', views.TagListView.as_view(), name='tag_list'), # Так создаются маршруты с базовыми классами
-    path('tag_detail/<int:pk>/', views.TagDetailView.as_view(), name='tag_detail'), # pk - это первичный ключ
-    path('tag_create/', views.TagCreateView.as_view(), name='tag_create'), #
-    path('tag_update/<int:pk>/', views.TagUpdateView.as_view(), name='tag_update'), #
-    path('tag_delate/<int:pk>/', views.TagDelateView.as_view(), name='tag_delate'), #
+    path('login/', views.UserLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('register/', views.UserCreateView.as_view(), name='register'),
 ]
