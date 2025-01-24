@@ -20,6 +20,13 @@
                 Опубликовано:
                 <a href="#!">Начать Bootstrap</a>
                 {{post.create}}
+                {% if post.has_image %}
+                <p>Есть картинка</p>
+                {% else %}
+                <p>Нет картинки</p>
+                {% endif %}
+                <p>{{post.has_image}}</p>
+                <p>{{post.some_method}}</p>
                 </p>
         </div>
         <!-- Divider-->

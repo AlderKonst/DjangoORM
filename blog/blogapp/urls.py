@@ -29,5 +29,5 @@ urlpatterns = [
     path('tag_detail/<int:pk>/', views.TagDetailView.as_view(), name='tag_detail'), # pk - это первичный ключ
     path('tag_create/', views.TagCreateView.as_view(), name='tag_create'), #
     path('tag_update/<int:pk>/', views.TagUpdateView.as_view(), name='tag_update'), #
-    path('tag_delate/<int:pk>/', views.TagDelateView.as_view(), name='tag_delate'), #
+    path('tag_delate/<int:pk>/', views.TagDeleteView.as_view(), name='tag_delate'), #
 ]

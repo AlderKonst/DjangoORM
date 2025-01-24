@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views.generic.base import ContextMixin # Для создание общих классов
 
 from .models import Post, Tag
-from .form import ContactForm, PostForm
+from .forms import ContactForm, PostForm
 from django.core.mail import send_mail
 
 def main_view(request):
@@ -29,12 +29,12 @@ def contact_view(request):
                 [email], # Cписок получателей
                 fail_silently=True # Не выводить ошибки
             )
-            return HttpResponseRedirect(reverse('blogapp:index')) # Перенаправляем на главную страницу
+            return HttpResponseRedirect(reverse('blog:index')) # Перенаправляем на главную страницу
         else:
-            return render(request, 'blogapp/create.html', context={'form': form})
+            return render(request, 'blogapp/contact.html', context={'form': form})
     else:
         form = ContactForm()
-        return render(request, 'blogapp/create.html', context={'form': form})
+        return render(request, 'blogapp/contact.html', context={'form': form})
 
 @user_passes_test(lambda u: u.is_superuser) # Теперь, при @user_passes_test смотреть пост разрешено только ползователям с определённым условием (здесь только админ)
 def post(request, id):
@@ -52,7 +52,7 @@ def create_post(request):
         if form.is_valid(): # Если данные формы заполнены правильно
             form.instance.user = request.user # Сохраняем в БД таблице текущего пользователя
             form.save() # Все данные, поля помнит, поэтому их загрузит и заполнит в БД
-            return HttpResponseRedirect(reverse('blogapp:index'))  # Перенаправляем на главную страницу
+            return HttpResponseRedirect(reverse('blog:index'))  # Перенаправляем на главную страницу
         else: # Если данные формы заполнены неправильно, то загрузит прежднюю страницу с формой для заполнения
             return render(request, 'blogapp/create.html', context={'form': form}) # причём в полях страницы уже будут видны ошибки
 
@@ -100,7 +100,7 @@ class TagCreateView(LoginRequiredMixin, # Чтобы теги мог созда�
     model = Tag
     # form_class =
     fields = '__all__' # Выбираем все поля класса Tag
-    success_url = reverse_lazy('blogapp:tag_list') # Вместо длинной конструкции с return HttpResponseRedirect(reverse('blogapp:tag_list.html'))
+    success_url = reverse_lazy('blog:tag_list') # Вместо длинной конструкции с return HttpResponseRedirect(reverse('blogapp:tag_list.html'))
     template_name = 'blogapp/tag_create.html'
     def post(self, request, *args, **kwargs): # Срабатывает, когда пришёл POST-запрос
         return super().post(request, *args, **kwargs)
@@ -114,11 +114,10 @@ class TagCreateView(LoginRequiredMixin, # Чтобы теги мог созда�
 class TagUpdateView(UpdateView):
     model = Tag
     fields = '__all__'
-    success_url = reverse_lazy('blogapp:tag_list')
+    success_url = reverse_lazy('blog:tag_list')
     template_name = 'blogapp/tag_create.html'
 
-class TagDelateView(DeleteView):
+class TagDeleteView(DeleteView):
     model = Tag
-    fields = '__all__'
-    success_url = reverse_lazy('blogapp:tag_list')
+    success_url = reverse_lazy('blog:tag_list')
     template_name = 'blogapp/tag_delate_confirm.html' # Страница подтверждения удаления
