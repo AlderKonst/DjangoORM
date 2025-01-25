@@ -66,9 +66,9 @@ class Post(TimeStamp):
     user = models.ForeignKey(BlogUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return f'{self.name}, category: {self.category.name}'
     def has_image(self):
-        return self.image is None
+        return bool(self.image)
 
     def some_method(self):
         return 'Некоторый метод в class Post'
