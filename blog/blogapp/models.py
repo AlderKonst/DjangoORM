@@ -68,7 +68,7 @@ class Post(TimeStamp):
     def __str__(self):
         return self.name
     def has_image(self):
-        return self.image is not None
+        return self.image is None
 
     def some_method(self):
         return 'Некоторый метод в class Post'
