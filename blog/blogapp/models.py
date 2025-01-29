@@ -73,7 +73,9 @@ class Post(TimeStamp):
 
     def some_method(self):
         return 'Некоторый метод в class Post'
-
+    def tags_on_admin(self): # Получение списка тегов
+        tags = self.tags.all()
+        return ', '.join([tag.name for tag in tags])
 
 # Классическое наследование
 class CoreObject(models.Model):
