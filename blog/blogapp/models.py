@@ -64,6 +64,7 @@ class Post(TimeStamp):
     # 2 варианта хранения картинки: в базе и в файле
     image = models.ImageField(upload_to='posts', null=True, blank=True)
     user = models.ForeignKey(BlogUser, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
         return f'{self.name}, category: {self.category.name}'
