@@ -76,7 +76,7 @@ class Post(TimeStamp, IsActiveMixin):
     # update = models.DateTimeField(auto_now=True) # Удалено благодаря наследованию от TimeStamp
     # Связь с категорией
     # Один ко многому
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_posts')
     # Связь с тегом (много к многому, вот так просто)
     tags = models.ManyToManyField(Tag)
 

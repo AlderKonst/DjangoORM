@@ -10,8 +10,8 @@ from django.views.generic.base import ContextMixin # Для создание о�
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger # Для постраничной навигации
 
-from .models import Post, Tag
-from .forms import ContactForm, PostForm
+from .models import Post, Tag, Category
+from .forms import ContactForm, PostForm, PostCategoryForm
 
 def main_view(request):
     posts = Post.active_objects.all() # Получаем все активные посты (вместо objects, ранее создал в models.py)
@@ -135,3 +135,32 @@ class TagDeleteView(DeleteView):
     model = Tag
     success_url = reverse_lazy('blog:tag_list')
     template_name = 'blogapp/tag_delate_confirm.html' # Страница подтверждения удаления
+
+# Нужно потом разобраться в этом коде, чтобы понять, как это работает
+class CategoryDetailView(DetailView):
+    template_name = 'blogapp/category_detail.html'
+    model = Category
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = PostCategoryForm()
+        return context
+
+class PostCategoryCreateView(CreateView):
+    model = Post
+    template_name = 'blogapp/category_detail.html'
+    success_url = '/'
+    form_class = PostCategoryForm
+
+    def post(self, request, *args, **kwargs):
+        self.category_pk = self.kwargs['pk']
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        user = self.request.user
+        form.instance.user = user
+        category = get_object_or_404(Category, pk=self.category_pk)
+        form.instance.category = category
+        return super().form_valid(form)
+
+    def get_success_url(self): # Чтобы в ту же категорию с формой переходилось после создания поста
+        return reverse('blogapp:category_detail', kwargs={'pk': self.category_pk})

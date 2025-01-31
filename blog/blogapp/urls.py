@@ -30,4 +30,6 @@ urlpatterns = [
     path('tag_create/', views.TagCreateView.as_view(), name='tag_create'), #
     path('tag_update/<int:pk>/', views.TagUpdateView.as_view(), name='tag_update'), #
     path('tag_delate/<int:pk>/', views.TagDeleteView.as_view(), name='tag_delate'), #
+    path('category_detail/<int:pk>/', views.CategoryDetailView.as_view(), name='category_detail'), #
+    path('post_category_create/<int:pk>/', views.PostCategoryCreateView.as_view(), name='post_category_create'), #
 ]

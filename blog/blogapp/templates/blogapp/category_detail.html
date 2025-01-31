@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Тэг {{object.name}}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <h3>{{name}}</h3>
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        <h1>{{object.name}}</h1>
+    </div>
+    {% for post in object.category_posts.all %}
+        {{post.name}}
+        <hr>
+    {% endfor %}
+    <form method="POST" action="{% url 'blogapp:post_category_create' pk=object.pk %}">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Сохранить</button>
+    </form>
+</div>
+{% endblock %}
