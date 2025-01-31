@@ -1,18 +1,31 @@
+from django.contrib.admin.templatetags.admin_list import pagination
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
+from django.template.defaultfilters import title
 from django.urls import reverse, reverse_lazy
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView # Базовые классы
 from django.views.generic.base import ContextMixin # Для создание общих классов
+from django.core.mail import send_mail
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger # Для постраничной навигации
 
 from .models import Post, Tag
 from .forms import ContactForm, PostForm
-from django.core.mail import send_mail
 
 def main_view(request):
-    posts = Post.objects.all()
-    return render(request,'blogapp/index.html', context={'posts': posts})
+    posts = Post.active_objects.all() # Получаем все активные посты (вместо objects, ранее создал в models.py)
+    paginator = Paginator(posts, 2) # Количество постов на странице
+    page = request.GET.get('page') # Получаем номер страницы
+    title_main = 'главная страница'
+    # joke = 'Заходит мужик в баню ...'
+    try: # Проверяем, есть ли посты на странице
+        posts = paginator.page(page) # Если есть, то выводим посты на страницу
+    except PageNotAnInteger: # Если страница не целое число, то выводим первые 2 поста
+        posts = paginator.page(1) # Получаем первые 2 поста
+    except EmptyPage: # Если страница пустая, число за пределами возможных страниц, то выводим последние 2 поста
+        posts = paginator.page(paginator.num_pages) # Получаем последние 2 поста
+    return render(request,'blogapp/index.html', context={'posts': posts, 'title_main': title_main})
 
 def contact_view(request):
     if request.method == 'POST':
@@ -66,9 +79,10 @@ class TagListView(ListView, NameContextMixin):
     model =Tag
     template_name = 'blogapp/tag_list.html' # Необязательно, если его не будет, то будет где-то храниться по-умолчанию
     context_object_name = 'tags' # Если хочется на странице использовать не стандартное object_list, а своё имя
+    paginate_by = 2 # Количество постов на странице, т.е. гораздо короче
 
     def get_queryset(self): # Получение данных (по-умолчанию возвращает все тэги, но можно настроить здесь ниже)
-        return Tag.objects.all() # В таком виде обычно возвращает (по-умолчанию), а можно настроить (переопределить), например, на получение определённых данных
+        return Tag.active_objects.all() # В таком виде обычно возвращает (по-умолчанию), а можно настроить (переопределить), например, на получение определённых данных
 
 # Детальная информация
 class TagDetailView(LoginRequiredMixin, # Оказывается ещё и это нужно, чтобы был редирект (на занятиях не показали)

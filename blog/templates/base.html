@@ -1,4 +1,5 @@
 {% load static %}
+{% load first %} <!-- Подключаем файл с собственными фильтрами -->
 
 <!DOCTYPE html>
 <html lang="ru-RU">
@@ -54,7 +55,7 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="site-heading">
-                            <h1>Пустой блог</h1>
+                            <h1>{{title_main|sup}}</h1>
                             <span class="subheading">Тема блога на Start Bootstrap</span>
                         </div>
                     </div>
@@ -96,7 +97,7 @@
                                 </a>
                             </li>
                         </ul>
-                        <div class="small text-center text-muted fst-italic">Copyright &copy; Твой Вебсайт 2024</div>
+                        <div class="small text-center text-muted fst-italic">{{joke }}</div>
                     </div>
                 </div>
             </div>

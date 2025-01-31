@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "blogapp", # Своё приложение добавляем
-    "usersapp" # Ещё добавляем приложения для добавления пользователей, авторизации, аутентификации ...
+    "usersapp", # Ещё добавляем приложения для добавления пользователей, авторизации, аутентификации ...
+    "addfilterapp" # Ещё добавляем приложения для добавления собственнонаписанных фильтров
 ]
 
 MIDDLEWARE = [
@@ -67,6 +68,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "blogapp.context_processors.get_joke", # Добавляем свой контекстный процессор
             ],
         },
     },

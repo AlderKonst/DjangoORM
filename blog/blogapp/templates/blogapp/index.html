@@ -7,6 +7,7 @@
 {% block content %}
 <div class="row gx-4 gx-lg-5 justify-content-center">
     <div class="col-md-10 col-lg-8 col-xl-7">
+        Количество постов на странице: {{posts|length}}
         <!-- Post preview-->
         {% for post in posts %}
         <div class="post-preview">
@@ -27,13 +28,24 @@
                 {% endif %}
                 <p>{{post.has_image}}</p>
                 <p>{{post.some_method}}</p>
-                </p>
+            </p>
         </div>
         <!-- Divider-->
         <hr class="my-4" />
         {% endfor %}
+        <!--<a class="btn btn-primary text-uppercase" href="#">Старые посты →</a>-->
         <!-- Pager-->
-        <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Старые посты →</a></div>
+        <div>
+            <a class="btn btn-outline-primary" href="?page=1">1</a>
+            {% if posts.has_previous %}
+            <a class="btn btn-outline-primary" href="?page={{posts.previous_page_number}}">←</a>
+            {% endif %}
+            <span class="btn btn-outline-primary">{{posts.number}}/{{posts.paginator.num_pages}}</span>
+            {% if posts.has_next %}
+            <a class="btn btn-outline-primary" href="?page={{posts.next_page_number}}">→</a>
+            {% endif %}
+            <a class="btn btn-outline-primary" href="?page={{posts.paginator.num_pages}}">{{posts.paginator.num_pages}}</a>
+        </div>
     </div>
 </div>
 {% endblock %}

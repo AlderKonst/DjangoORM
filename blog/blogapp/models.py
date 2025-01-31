@@ -3,6 +3,25 @@ from usersapp.models import BlogUser
 
 # 3 типа наследования: абстрактное, классическое и прокси
 
+class ActiveManager(models.Manager):
+    def get_queryset(self):
+        all_objects = super().get_queryset()
+        return all_objects.filter(is_active=True)
+
+class IsActiveMixin(models.Model):
+    is_active = models.BooleanField(default=False)
+    objects = models.Manager() # Чтобы objects (тот, что по-умолчанию) оставался работать как раньше
+    active_objects = ActiveManager() # Переопределяем метод get_queryset
+    class Meta:
+        abstract = True
+
+'''
+class UpdatedObjectsMixin(models.Manager): # Чтобы дата обновления не была равна дате создания
+    def get_queryset(self):
+        all_objects = super().get_queryset() 
+        return all_objects.filter(update=F('create') # Тут нужен F-запрос, однако будем его проходить позже
+'''
+
 class TimeStamp(models.Model): # Абстрактный тип наследования здесь
     create = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
@@ -42,13 +61,14 @@ class Category(models.Model):
     # models.EmailField
     def __str__(self):
         return self.name
-class Tag(models.Model):
+
+class Tag(IsActiveMixin):
     name = models.CharField(max_length=32,
                             unique=True)
     def __str__(self):
         return self.name
 
-class Post(TimeStamp):
+class Post(TimeStamp, IsActiveMixin):
     name = models.CharField(max_length=32,
                             unique=True)
     text = models.TextField()
