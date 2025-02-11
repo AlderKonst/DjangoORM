@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.functional import cached_property
+
 from usersapp.models import BlogUser
 
 # 3 типа наследования: абстрактное, классическое и прокси
@@ -24,7 +26,8 @@ class UpdatedObjectsMixin(models.Manager): # Чтобы дата обновле�
 
 class TimeStamp(models.Model): # Абстрактный тип наследования здесь
     create = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    update = models.DateTimeField(auto_now=True,
+                                  db_index=True) # Индекс нужен, если к этому полю часто проводят поиск, н-ер, через .filter
 
     class Meta:
         abstract = True # Теперь для TimeStamp не создаётся новая таблица, чисто для избежания дублирования
@@ -85,6 +88,11 @@ class Post(TimeStamp, IsActiveMixin):
     image = models.ImageField(upload_to='posts', null=True, blank=True)
     user = models.ForeignKey(BlogUser, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(default=1)
+
+    @cached_property # Превращает метод в свойство
+    def get_all_tags(self):  # Для надуманного примера с повторяющимися SQL-запросами
+        tags = Tag.objects.all()
+        return tags
 
     def __str__(self):
         return f'{self.name}, category: {self.category.name}'

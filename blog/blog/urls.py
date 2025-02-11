@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +29,7 @@ urlpatterns = [
     path('users/',
          include(('usersapp.urls', 'users'),
          namespace='users'))
-]
+] + debug_toolbar_urls() # В отличие от старых версий Django, проще и добавляем не в блок "if settings.DEBUG"
 
 if settings.DEBUG: # Чтобы изображения могли отображаться в браузере
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

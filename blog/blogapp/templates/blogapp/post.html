@@ -8,8 +8,20 @@
 <div class="container px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
         <div class="col-md-10 col-lg-8 col-xl-7">
-            <img src="{{post.image.url}}" alt="{{post.name}}" width="300">
-            {{post.text|safe}}
+            {% with get_posts=post.get_all_tags %} {# Использование переменной в шаблоне #}
+                {% for tag in get_posts %} {# Для надуманного примера #}
+                    {{tag}}//
+                {% endfor %}
+                <p></p>
+                {% if post.image %}
+                    <img src="{{post.image.url}}" alt="{{post.name}}" width="300">
+                {% endif %}
+                {{post.text|safe}}
+                <p></p>
+                {% for tag in get_posts %} {# Для надуманного примера с повторяющимися запросами #}
+                    {{tag}}--
+                {% endfor %}
+            {% endwith %}
         </div>
     </div>
 </div>

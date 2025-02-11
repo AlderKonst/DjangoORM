@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "blogapp", # Своё приложение добавляем
     "usersapp", # Ещё добавляем приложения для добавления пользователей, авторизации, аутентификации ...
-    "addfilterapp" # Ещё добавляем приложения для добавления собственнонаписанных фильтров
+    "addfilterapp", # Ещё добавляем приложения для добавления собственнонаписанных фильтров
+    "debug_toolbar", # Добавляем набор панелей, появляющиеся на странице в режиме отладки (обычно его в начале добавляют)
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,13 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware", # Добавляем панель отладки
+]
+
+INTERNAL_IPS = [ # Интернет-адреса, которые будут доступны в режиме отладки
+    # ...
+    "127.0.0.1",
+    # ...
 ]
 
 ROOT_URLCONF = "blog.urls"

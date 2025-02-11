@@ -12,7 +12,7 @@ def set_active(modeladmin, request, queryset): # Сделать активным
 set_active.short_description = 'Активировать'
 
 class PostAdmin(admin.ModelAdmin): # Для расширения возможностей админки
-    list_display = ['name', 'text', 'category', 'tags_on_admin', 'rating', 'is_active'] # Поля в виде колонок с возможностью сортировки
+    list_display = ['id', 'name', 'text', 'category', 'tags_on_admin', 'rating', 'is_active'] # Поля в виде колонок с возможностью сортировки
     actions = [clear_rating, set_active]
 
 admin.site.register(Post, PostAdmin)

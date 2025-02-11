@@ -13,9 +13,24 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger # Дл�
 from .models import Post, Tag, Category
 from .forms import ContactForm, PostForm, PostCategoryForm
 
+"""
+Предпочтительность применения методов кэширования по-убыванию:
+1) Ничего не делаем (логика программы)
+2) select_related()
+3) @cached_property, with в шаблоне, select_related()
+4) Система кэширования
+5) Сложные прямые запросы
+6) Используем не Django
+"""
+
 def main_view(request):
-    posts = Post.active_objects.all() # Получаем все активные посты (вместо objects, ранее создал в models.py)
-    paginator = Paginator(posts, 2) # Количество постов на странице
+    # Получаем все активные посты (вместо objects, ранее создал в models.py)
+    # .select_related() - этот метод кэширования - основа основ!!!
+    posts = Post.active_objects.select_related('category', 'user').all() # Ещё добавляем .select_related('category')
+    # чтобы получить только те посты, которые связаны с соответствующими категориями,
+    # Если же связь многие-ко-многим, то выбираем prefetch_related
+    # posts = Post.active_objects.all() # Вот так будет в несколько раз дольше
+    paginator = Paginator(posts, 100) # Количество постов на странице увеличиваем с 2 до 100 для демонстрации оптимизации
     page = request.GET.get('page') # Получаем номер страницы
     title_main = 'главная страница'
     # joke = 'Заходит мужик в баню ...'
@@ -52,6 +67,10 @@ def contact_view(request):
 @user_passes_test(lambda u: u.is_superuser) # Теперь, при @user_passes_test смотреть пост разрешено только ползователям с определённым условием (здесь только админ)
 def post(request, id):
     post = get_object_or_404(Post, id=id)
+    # Для ещё одного примера с дублированием SQL-запроса
+    all_tags = post.get_all_tags # Без скобок, поскольку метод в модели Post превращён в свойство через @cached_property
+    for i in all_tags:
+        print(i)
     return render(request, 'blogapp/post.html', context={'post': post})
 
 @login_required # Вот так просто добавляем это и посты смогут создавать только залогиненные пользователи
