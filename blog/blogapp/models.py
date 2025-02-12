@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.utils.functional import cached_property
 
 from usersapp.models import BlogUser
@@ -17,12 +18,10 @@ class IsActiveMixin(models.Model):
     class Meta:
         abstract = True
 
-'''
 class UpdatedObjectsMixin(models.Manager): # Чтобы дата обновления не была равна дате создания
     def get_queryset(self):
         all_objects = super().get_queryset() 
-        return all_objects.filter(update=F('create') # Тут нужен F-запрос, однако будем его проходить позже
-'''
+        return all_objects.filter(update=F('create')) # Только те, что равны дате создания
 
 class TimeStamp(models.Model): # Абстрактный тип наследования здесь
     create = models.DateTimeField(auto_now_add=True)

@@ -21,6 +21,11 @@ from .forms import ContactForm, PostForm, PostCategoryForm
 4) Система кэширования
 5) Сложные прямые запросы
 6) Используем не Django
+
+Кэшировать можно:
+1) значение
+2) view (страница), что чаще всего
+3) весь сайт
 """
 
 def main_view(request):
