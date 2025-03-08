@@ -21,6 +21,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from debug_toolbar.toolbar import debug_toolbar_urls
 
+from rest_framework import routers
+from blogapp.api_views import CategoryViewSet, PostViewSet
+
+#router_categories = routers.DefaultRouter()
+#router_categories.register(r'categories', CategoryViewSet)
+#router_posts = routers.DefaultRouter()
+#router_posts.register(r'posts', PostViewSet)
+router = routers.DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+router.register(r'posts', PostViewSet)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',
@@ -28,7 +40,13 @@ urlpatterns = [
          namespace='blog')), # Это чтобы в index.html можно было сделать так: <a href="{% url 'blog:post' id=post.id %}">
     path('users/',
          include(('usersapp.urls', 'users'),
-         namespace='users'))
+         namespace='users')),
+    #path('api/v0/categories/', include(router_categories.urls)), # По категории через API
+    #path('api/v0/posts/', include(router_posts.urls)), # По постам через API
+    path('api/v0/', include(router.urls)), # По категории через API
+    path('api-auth/',
+         include('rest_framework.urls',
+         namespace='rest_framework')) # Для работы с API
 ] + debug_toolbar_urls() # В отличие от старых версий Django, проще и добавляем не в блок "if settings.DEBUG"
 
 if settings.DEBUG: # Чтобы изображения могли отображаться в браузере

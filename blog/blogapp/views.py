@@ -1,4 +1,5 @@
 from django.contrib.admin.templatetags.admin_list import pagination
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
 from django.template.defaultfilters import title
 from django.urls import reverse, reverse_lazy
@@ -46,6 +47,7 @@ def main_view(request):
     except EmptyPage: # Если страница пустая, число за пределами возможных страниц, то выводим последние 2 поста
         posts = paginator.page(paginator.num_pages) # Получаем последние 2 поста
     return render(request,'blogapp/index.html', context={'posts': posts, 'title_main': title_main})
+    # return JsonResponse(сериализация(context={'posts': posts, 'title_main': title_main})) Если лишь для одной странички
 
 def contact_view(request):
     if request.method == 'POST':
