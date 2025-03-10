@@ -6,7 +6,8 @@ from django.urls import reverse, reverse_lazy
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView # Базовые классы
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, \
+    TemplateView  # Базовые классы
 from django.views.generic.base import ContextMixin # Для создание общих классов
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger # Для постраничной навигации
@@ -190,3 +191,6 @@ class PostCategoryCreateView(CreateView):
 
     def get_success_url(self): # Чтобы в ту же категорию с формой переходилось после создания поста
         return reverse('blogapp:category_detail', kwargs={'pk': self.category_pk})
+
+class SimpleMainAjax(TemplateView): # Для создания страницы с полной реализацией AJAX
+    template_name = 'blogapp/simple.html'
