@@ -160,6 +160,12 @@ REST_FRAMEWORK = {
     # Используйте стандартные разрешения Django `django.contrib.auth`,
     # или разрешите доступ только для чтения для пользователей без авторизации.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [ # При запросе к API, DRF проверяет аутентификацию, используя классы по-умолчанию
+        'rest_framework.authentication.BasicAuthentication', # Рекомендуется только для тестирования (логин и пароль в незашифрованном виде)
+        'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.TokenAuthentication', # Обычно ещё его добавляют, в этом примере будет иначе
     ]
 }
